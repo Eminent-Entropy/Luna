@@ -16,7 +16,7 @@ $last_responded = 0
 
 PREFIX = 'luna'
 PREFIXL = PREFIX.length
-react_message = 778392481950728234
+react_message = 778504216829493280
 
 YES_ARY = ["Yep!", "You Bet!", "For Sure!", "Always!"]
 NO_ARY = ["No, Sorry", "Nope", "Sadly no", "Unfortunately not"]
