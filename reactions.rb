@@ -23,7 +23,6 @@ def reaction_add(bot, event)
   if event.emoji.name == 'rainbow6'
     user.add_role(rainbowsix)
   elsif event.emoji.name == 'minecraft'
-    puts 'yes'
     user.add_role(mincraft)
   elsif event.emoji.name == 'terraria'
     user.add_role(terraira)
