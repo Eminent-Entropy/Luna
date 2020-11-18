@@ -11,7 +11,6 @@ NMS = 778466394643365929
 STELLARIS = 778466465543094293
 
 def reaction_add(bot, event)
-  puts "no"
   user = event.user
   rainbowsix = bot.server(SERVER).role(RAINBOWSIX)
   mincraft = bot.server(SERVER).role(MINECRAFT)
