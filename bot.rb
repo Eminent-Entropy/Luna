@@ -24,29 +24,28 @@ UNK_ARY = ["Didn't get that, sorry?", "Could you repeat that please?", "Could yo
 
 ##  messages  ##
 bot.message do |event|
+  content = event.message.content.downcase
 
   #are you there?
-  if event.message.content.downcase.start_with?(PREFIX + ', are you there?')
+  if content.start_with?(PREFIX + ', are you there?') or content.start_with?(PREFIX + ' are you there?')
     yes(event)
     $last_responded = event.message.id
-  elsif event.message.content.downcase.start_with?(PREFIX + ', you there?')
+  elsif content.start_with?(PREFIX + ', you there?') or content.start_with?(PREFIX + ' you there?')
     yes(event)
     $last_responded = event.message.id
   end
 
   #say
-  if event.message.content.downcase.start_with?(PREFIX + ', say')
+  if content.start_with?(PREFIX + ', say') or content.start_with?(PREFIX + ' say')
     say(event)
     $last_responded = event.message.id
   end
 
   #unknown
-  if event.message.content.downcase.start_with?(PREFIX)
-    sleep 0.5
-    if event.message.id != $last_responded
-      unknown(event)
-      $last_responded = event.message.id
-    end
+  sleep 0.1 #time to update $last_responded
+  if content.start_with?(PREFIX) and event.message.id != $last_responded
+    unknown(event)
+    $last_responded = event.message.id
   end
 end
 
