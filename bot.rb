@@ -36,8 +36,11 @@ bot.message do |event|
   end
 
   #say
-  if content.start_with?(PREFIX + ', say') or content.start_with?(PREFIX + ' say')
-    say(event)
+  if content.start_with?(PREFIX + ', say')
+    say(event, 6)
+    $last_responded = event.message.id
+  elsif content.start_with?(PREFIX + ' say')
+    say(event, 5)
     $last_responded = event.message.id
   end
 
@@ -55,9 +58,8 @@ end
 ##            ##
 
 #say (repeat)
-def say (event)
-  commandl = PREFIXL + 4
-  event.respond event.content.slice!(commandl-1, (event.content.length - 1))
+def say (event, commandl)
+  event.respond event.content.slice!(PREFIXL + commandl, (event.content.length - 1))
 end
 
 #yes
