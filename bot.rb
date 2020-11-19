@@ -10,6 +10,7 @@ bot = Discordrb::Bot.new token: cred_hash['token']
 $last_responded = 0
 
 
+
 ##            ##
 ##  Aliases   ##
 ##            ##
@@ -21,6 +22,7 @@ react_message = 778504216829493280
 YES_ARY = ["Yep!", "You Bet!", "For Sure!", "Always!"]
 NO_ARY = ["No, Sorry", "Nope", "Sadly no", "Unfortunately not"]
 UNK_ARY = ["Didn't get that, sorry?", "Could you repeat that please?", "Could you say that again?", "Run that by me again?"]
+
 
 ##  messages  ##
 bot.message do |event|
@@ -67,11 +69,12 @@ bot.message do |event|
 end
 
 
+
 ##            ##
 ##  Commands  ##
 ##            ##
 
-  # General #
+  ## General ##
 #say (repeat)
 def say (event, commandl)
   event.respond event.content.slice!(PREFIXL + commandl, (event.content.length - 1))
@@ -92,11 +95,13 @@ def unknown (event)
   event.respond UNK_ARY[rand(UNK_ARY.count)]
 end
 
-  #  memes  #
+
+  ##  memes  ##
 #I'm dad
 def dad (event, commandl)
   event.respond 'Hi, ' + event.content.slice!(commandl, (event.content.length - 1)) + ' I\'m dad'
 end
+
 
 
 ##            ##
