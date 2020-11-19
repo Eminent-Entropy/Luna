@@ -21,6 +21,7 @@ react_message = 778504216829493280
 
 YES_ARY = ["Yep!", "You Bet!", "For Sure!", "Always!"]
 NO_ARY = ["No, Sorry", "Nope", "Sadly no", "Unfortunately not"]
+YN_ARY = ["As I see it, yes", "Most likely", "Without a doubt", "Yes – definitely", "Signs point to yes", "Yes", "Not sure...", "I'll have to get back to you on that...", "Better to not tell you now", "Don't count on it", "My sources say no", "Very Doubtful", "No"]
 UNK_ARY = ["Didn't get that, sorry?", "Could you repeat that please?", "Could you say that again?", "Run that by me again?"]
 
 
@@ -60,7 +61,15 @@ bot.message do |event|
     $last_responded = event.message.id
   end
 
-    # unknown #
+    # misc #
+  #question
+  sleep 0.1 #time to update $last_responded
+  if content.start_with?(PREFIX) and event.message.id != $last_responded and content.end_with?('?')
+    ynanswer(event)
+    $last_responded = event.message.id
+  end
+
+  #unknown
   sleep 0.1 #time to update $last_responded
   if content.start_with?(PREFIX) and event.message.id != $last_responded
     unknown(event)
@@ -88,6 +97,11 @@ end
 #no
 def no (event)
   event.respond NO_ARY[rand(NO_ARY.count)]
+end
+
+#yes no answer
+def ynanswer (event)
+  event.respond YN_ARY[rand(YN_ARY.count)]
 end
 
 #doesn't understand
