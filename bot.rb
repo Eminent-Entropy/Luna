@@ -26,6 +26,7 @@ UNK_ARY = ["Didn't get that, sorry?", "Could you repeat that please?", "Could yo
 bot.message do |event|
   content = event.message.content.downcase
 
+    # general #
   #are you there?
   if content.start_with?(PREFIX + ', are you there?') or content.start_with?(PREFIX + ' are you there?')
     yes(event)
@@ -44,7 +45,20 @@ bot.message do |event|
     $last_responded = event.message.id
   end
 
-  #unknown
+    # memes #
+  #dad
+  if content.start_with?('i\'m ')
+    dad(event, 4)
+    $last_responded = event.message.id
+  elsif content.start_with?('i am ')
+    dad(event, 5)
+    $last_responded = event.message.id
+  elsif content.start_with?('im ')
+    dad(event, 3)
+    $last_responded = event.message.id
+  end
+
+    # unknown #
   sleep 0.1 #time to update $last_responded
   if content.start_with?(PREFIX) and event.message.id != $last_responded
     unknown(event)
@@ -57,6 +71,7 @@ end
 ##  Commands  ##
 ##            ##
 
+  # General #
 #say (repeat)
 def say (event, commandl)
   event.respond event.content.slice!(PREFIXL + commandl, (event.content.length - 1))
@@ -75,6 +90,12 @@ end
 #doesn't understand
 def unknown (event)
   event.respond UNK_ARY[rand(UNK_ARY.count)]
+end
+
+  #  memes  #
+#I'm dad
+def dad (event, commandl)
+  event.respond 'Hi, ' + event.content.slice!(commandl, (event.content.length - 1)) + ' I\'m dad'
 end
 
 
