@@ -7,7 +7,6 @@ cred = File.read('../luna-cred.json')
 cred_hash = JSON.parse(cred)
 
 bot = Discordrb::Bot.new token: cred_hash['token']
-$last_responded = 0
 
 
 
@@ -18,6 +17,9 @@ $last_responded = 0
 PREFIX = 'luna'
 PREFIXL = PREFIX.length
 react_message = 778504216829493280
+
+$last_responded = 0
+$last_question = 0
 
 YES_ARY = ["Yep!", "You Bet!", "For Sure!", "Always!"]
 NO_ARY = ["No, Sorry", "Nope", "Sadly no", "Unfortunately not"]
@@ -67,6 +69,11 @@ bot.message do |event|
   if content.start_with?(PREFIX) and event.message.id != $last_responded and content.end_with?('?')
     ynanswer(event)
     $last_responded = event.message.id
+    $last_question = Time.now.to_i
+  elsif content.end_with?('?') and (Time.now.to_i - $last_question) < 30
+    ynanswer(event)
+    $last_responded = event.message.id
+    $last_question = Time.now.to_i
   end
 
   #unknown
