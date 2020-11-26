@@ -1,5 +1,7 @@
 require 'discordrb'
 require 'json'
+require 'dentaku'
+
 
 require_relative 'reactions'
 
@@ -13,7 +15,6 @@ bot = Discordrb::Bot.new token: cred_hash['token']
 ##            ##
 ##  Aliases   ##
 ##            ##
-
 PREFIX = 'luna'
 PREFIXL = PREFIX.length
 react_message = 778504216829493280
@@ -30,50 +31,69 @@ UNK_ARY = ["Didn't get that, sorry?", "Could you repeat that please?", "Could yo
 ##  messages  ##
 bot.message do |event|
   content = event.message.content.downcase
+  begin
+      # general #
+    #are you there?
+    if content.start_with?(PREFIX + ', are you there?') or content.start_with?(PREFIX + ' are you there?')
+      yes(event)
+      $last_responded = event.message.id
+    elsif content.start_with?(PREFIX + ', you there?') or content.start_with?(PREFIX + ' you there?')
+      yes(event)
+      $last_responded = event.message.id
+    end
 
-    # general #
-  #are you there?
-  if content.start_with?(PREFIX + ', are you there?') or content.start_with?(PREFIX + ' are you there?')
-    yes(event)
-    $last_responded = event.message.id
-  elsif content.start_with?(PREFIX + ', you there?') or content.start_with?(PREFIX + ' you there?')
-    yes(event)
-    $last_responded = event.message.id
-  end
+    #say
+    if content.start_with?(PREFIX + ', say')
+      say(event, 6)
+      $last_responded = event.message.id
+    elsif content.start_with?(PREFIX + ' say')
+      say(event, 5)
+      $last_responded = event.message.id
+    end
 
-  #say
-  if content.start_with?(PREFIX + ', say')
-    say(event, 6)
-    $last_responded = event.message.id
-  elsif content.start_with?(PREFIX + ' say')
-    say(event, 5)
-    $last_responded = event.message.id
-  end
+    #eval
+    if content.start_with?(PREFIX + ', what is')
+      cmdeval(event, 10)
+      $last_responded = event.message.id
+    elsif content.start_with?(PREFIX + ' what is')
+      cmdeval(event, 9)
+      $last_responded = event.message.id
+    elsif content.start_with?(PREFIX + ', what\'s')
+      cmdeval(event, 9)
+      $last_responded = event.message.id
+    elsif content.start_with?(PREFIX + ' what\'s')
+      cmdeval(event, 8)
+      $last_responded = event.message.id
+    end
 
-    # memes #
-  #dad
-  if content.start_with?('i\'m ')
-    dad(event, 4)
-    $last_responded = event.message.id
-  elsif content.start_with?('i am ')
-    dad(event, 5)
-    $last_responded = event.message.id
-  elsif content.start_with?('im ')
-    dad(event, 3)
-    $last_responded = event.message.id
-  end
+      # memes #
+    #dad
+    if content.start_with?('i\'m ')
+      dad(event, 4)
+      $last_responded = event.message.id
+    elsif content.start_with?('i am ')
+      dad(event, 5)
+      $last_responded = event.message.id
+    elsif content.start_with?('im ')
+      dad(event, 3)
+      $last_responded = event.message.id
+    end
 
-    # misc #
-  #question
-  sleep 0.1 #time to update $last_responded
-  if content.start_with?(PREFIX) and event.message.id != $last_responded and content.end_with?('?')
-    ynanswer(event)
+      # misc #
+    #question
+    sleep 0.1 #time to update $last_responded
+    if content.start_with?(PREFIX) and event.message.id != $last_responded and content.end_with?('?')
+      ynanswer(event)
+      $last_responded = event.message.id
+      $last_question = Time.now.to_i
+    elsif content.end_with?('?') and (Time.now.to_i - $last_question) < 30
+      ynanswer(event)
+      $last_responded = event.message.id
+      $last_question = Time.now.to_i
+    end
+  rescue
+    unknown(event)
     $last_responded = event.message.id
-    $last_question = Time.now.to_i
-  elsif content.end_with?('?') and (Time.now.to_i - $last_question) < 30
-    ynanswer(event)
-    $last_responded = event.message.id
-    $last_question = Time.now.to_i
   end
 
   #unknown
@@ -114,6 +134,13 @@ end
 #doesn't understand
 def unknown (event)
   event.respond UNK_ARY[rand(UNK_ARY.count)]
+end
+
+#eval
+def cmdeval (event, commandl)
+  content = event.content
+  content = content.delete_suffix("?")
+  event.respond Dentaku.calculator.evaluate content.slice!(PREFIXL + commandl, (content.length - 1))
 end
 
 
