@@ -147,7 +147,7 @@ end
   ##  memes  ##
 #I'm dad
 def dad (event, commandl)
-  event.respond 'Hi, ' + event.content.slice!(commandl, (event.content.length - 1)) + ' I\'m dad'
+  event.respond 'Hi ' + event.content.slice!(commandl, (event.content.length - 1)) + ', I\'m dad'
 end
 
 
